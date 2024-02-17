@@ -351,7 +351,7 @@ public class vasilealexandru02
 
         Console.WriteLine("");
 
-
+        leerContactos();
         agendaDeContactos();
         /* DIFICULTAD EXTRA (opcional):
          * Crea una agenda de contactos por terminal.
@@ -367,7 +367,7 @@ public class vasilealexandru02
 
         static void agendaDeContactos()
         {
-            leerContactos();
+
             Console.WriteLine("---- AGENDA DE CONTACTOS ----");
             Console.WriteLine("¿Qué operacion quieres realizar?");
             Console.WriteLine("1. Buscar contactos\n" +
@@ -473,7 +473,7 @@ public class vasilealexandru02
                 Console.WriteLine("Lista de contactos: ");
                 foreach (Contacto contacto in listaDeContactos)
                 {
-                    Console.WriteLine($"Nombre: {contacto.nombre} | Número tlf: {contacto.numeroTelefono}");
+                    Console.WriteLine($"Id: {contacto.idContacto} || Nombre: {contacto.nombre} | Número tlf: {contacto.numeroTelefono}");
                 }
             }
 
@@ -530,14 +530,17 @@ class Alimento
 
 class Contacto
 {
-
+    public static int idAutoIncrementable;
     public string nombre;
     public string numeroTelefono;
+    public int idContacto;
 
     public Contacto(string nombre, string numeroTelefono)
     {
+        idContacto = idAutoIncrementable;
         this.nombre = nombre;
         this.numeroTelefono = numeroTelefono;
+        idAutoIncrementable++;
     }
     public override string ToString()
     {

@@ -3,9 +3,11 @@ public class vasilealexandru02
     static string regexTelefono = @"^\d{9}$";
 
     static List<Contacto> listaDeContactos = new List<Contacto>();
+
+    static string rutaArchivoTxt = "";
     static void Main(string[] args)
     {
-
+        rutaArchivoTxt = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "contactos.txt");
         // Colas 
         // Es una colección de tipo FIFO (First In First Out)
 
@@ -365,6 +367,7 @@ public class vasilealexandru02
 
         static void agendaDeContactos()
         {
+            leerContactos();
             Console.WriteLine("---- AGENDA DE CONTACTOS ----");
             Console.WriteLine("¿Qué operacion quieres realizar?");
             Console.WriteLine("1. Buscar contactos\n" +
@@ -395,11 +398,9 @@ public class vasilealexandru02
                         }
                         break;
                     case 1:
-                        Console.WriteLine("Opcion buscar contactos");
                         buscarContactos();
                         break;
                     case 2:
-                        Console.WriteLine("Opcion introducir contacto");
                         introducirContactos();
                         break;
                     case 3:
@@ -443,7 +444,6 @@ public class vasilealexandru02
             Console.WriteLine("Introduce el número de teléfono de tu contacto");
 
             string mensaje = "";
-
             do
             {
                 Console.WriteLine(mensaje);
@@ -455,6 +455,7 @@ public class vasilealexandru02
 
             listaDeContactos.Add(new Contacto(nombreContacto, telefonoContacto));
             Console.WriteLine($"¡El contacto con el nombre {nombreContacto} y el número de teléfono {telefonoContacto}  se ha introducido correctamente!");
+            guardarContacto();
             agendaDeContactos();
 
         }
@@ -462,14 +463,60 @@ public class vasilealexandru02
         // Este método todos los contactos que hemos añadidos
         static void buscarContactos()
         {
-            throw new NotImplementedException();
+            if (listaDeContactos.Count == 0)
+            {
+                Console.WriteLine("Lista de contactos vacía :(\n");
+
+            }
+            else
+            {
+                Console.WriteLine("Lista de contactos: ");
+                foreach (Contacto contacto in listaDeContactos)
+                {
+                    Console.WriteLine($"Nombre: {contacto.nombre} | Número tlf: {contacto.numeroTelefono}");
+                }
+            }
+
+            agendaDeContactos();
         }
 
 
         // Este método guarda los contactos en un fichero de texto
-        static void guardarContactos()
+        static void guardarContacto()
         {
+            using (StreamWriter file = new StreamWriter(rutaArchivoTxt))
+            {
+                foreach (Contacto contacto in listaDeContactos)
+                {
+                    file.WriteLine(contacto.ToString());
+                }
+            }
 
+        }
+
+        // Este método los contactos del fichero de texto
+        static void leerContactos()
+        {
+            try
+            {
+                using (StreamReader reader = new StreamReader(rutaArchivoTxt))
+                {
+                    string linea;
+                    while ((linea = reader.ReadLine()) != null)
+                    {
+                        string[] partes = linea.Split(',');
+                        if (partes.Length == 2)
+                        {
+                            Contacto contacto = new Contacto(partes[0], partes[1]);
+                            listaDeContactos.Add(contacto);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 
@@ -491,6 +538,10 @@ class Contacto
     {
         this.nombre = nombre;
         this.numeroTelefono = numeroTelefono;
+    }
+    public override string ToString()
+    {
+        return $"{nombre},{numeroTelefono}";
     }
 }
 

@@ -411,6 +411,7 @@ public class vasilealexandru02
                         eliminarContacto();
                         break;
                     default:
+                        Console.WriteLine("Opción no válida");
                         break;
                 }
 
@@ -470,7 +471,11 @@ public class vasilealexandru02
                 int idUsuario;
                 bool idCorrecto;
                 bool campoAModificarCorrecto;
+                bool telefonoValido;
                 int campoAModificar;
+                string telefonoContacto;
+                string mensajeTelefonoIncorrecto = "";
+
                 string mensajeActualizar = "Introduce el id del usuario que quieres actualizar: ";
 
 
@@ -498,8 +503,18 @@ public class vasilealexandru02
                     }
                     else if (campoAModificar == 2)
                     {
-                        Console.WriteLine($"Valor actual: {contactoSeleccionado.numeroTelefono} | Nuevo valor: \n");
-                        listaDeContactos.Where(c => c.idContacto == idUsuario).FirstOrDefault().numeroTelefono = Console.ReadLine();
+
+                        do
+                        {
+                            Console.WriteLine($"Valor actual: {contactoSeleccionado.numeroTelefono} | Nuevo valor: \n");
+                            Console.WriteLine(mensajeTelefonoIncorrecto);
+                            telefonoContacto = Console.ReadLine();
+                            telefonoValido = Regex.IsMatch(telefonoContacto, regexTelefono);
+                            mensajeTelefonoIncorrecto = "Introduce un número de teléfono válido!: ";
+
+                        } while (!telefonoValido);
+
+                        listaDeContactos.Where(c => c.idContacto == idUsuario).FirstOrDefault().numeroTelefono = telefonoContacto;
 
                         Console.WriteLine("Numero de teléfono modificado correctamente.");
                     }

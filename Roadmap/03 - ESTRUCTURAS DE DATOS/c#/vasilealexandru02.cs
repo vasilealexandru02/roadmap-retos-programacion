@@ -395,6 +395,7 @@ public class vasilealexandru02
                         else
                         {
                             Console.WriteLine("Has salido del programa!");
+                            Environment.Exit(0);
                         }
                         break;
                     case 1:
@@ -410,7 +411,6 @@ public class vasilealexandru02
                         eliminarContacto();
                         break;
                     default:
-
                         break;
                 }
 

@@ -404,11 +404,9 @@ public class vasilealexandru02
                         introducirContactos();
                         break;
                     case 3:
-                        Console.WriteLine("Opcion actualizar contacto");
                         actualizarContacto();
                         break;
                     case 4:
-                        Console.WriteLine("Opcion eliminar contacto");
                         eliminarContacto();
                         break;
                     default:
@@ -429,7 +427,64 @@ public class vasilealexandru02
         // Este método va a actualizar un contacto en concreto
         static void actualizarContacto()
         {
-            throw new NotImplementedException();
+            if (!(listaDeContactos.Count == 0))
+            {
+                int idUsuario;
+                bool idCorrecto;
+                bool campoAModificarCorrecto;
+                int campoAModificar;
+                string mensajeActualizar = "Introduce el id del usuario que quieres actualizar: ";
+
+
+                do
+                {
+                    Console.WriteLine(mensajeActualizar);
+                    idCorrecto = int.TryParse(Console.ReadLine(), out idUsuario);
+                    mensajeActualizar = "Por favor introduce un valor numérico válido: ";
+
+                } while (!idCorrecto);
+
+
+                var contactoSeleccionado = listaDeContactos.Where(c => c.idContacto == idUsuario).FirstOrDefault();
+                if (contactoSeleccionado != null)
+                {
+                    Console.WriteLine("Por favor elige el campo a modificar: \n 1. Nombre\n" +
+                  " 2. Número telefónico");
+                    campoAModificarCorrecto = int.TryParse(Console.ReadLine(), out campoAModificar);
+                    if (campoAModificar == 1)
+                    {
+                        Console.WriteLine($"Valor actual: {contactoSeleccionado.nombre} | Nuevo valor: \n");
+                        listaDeContactos.Where(c => c.idContacto == idUsuario).FirstOrDefault().nombre = Console.ReadLine();
+
+                        Console.WriteLine("Nombre modificado correctamente.");
+                    }
+                    else if (campoAModificar == 2)
+                    {
+                        Console.WriteLine($"Valor actual: {contactoSeleccionado.numeroTelefono} | Nuevo valor: \n");
+                        listaDeContactos.Where(c => c.idContacto == idUsuario).FirstOrDefault().numeroTelefono = Console.ReadLine();
+
+                        Console.WriteLine("Numero de teléfono modificado correctamente.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Introduce un campo correcto");
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("¡Id introducida no encontrada!");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("¡La lista está vacía :(!");
+            }
+            vaciarArchivo();
+            guardarContacto();
+            agendaDeContactos();
+
         }
 
 
@@ -465,18 +520,18 @@ public class vasilealexandru02
         {
             if (listaDeContactos.Count == 0)
             {
-                Console.WriteLine("Lista de contactos vacía :(\n");
+                Console.WriteLine("Lista de contactos vacía :(");
 
             }
             else
             {
-                Console.WriteLine("Lista de contactos: ");
+                Console.WriteLine("\nLista de contactos: \n");
                 foreach (Contacto contacto in listaDeContactos)
                 {
                     Console.WriteLine($"Id: {contacto.idContacto} || Nombre: {contacto.nombre} | Número tlf: {contacto.numeroTelefono}");
                 }
             }
-
+            Console.WriteLine("");
             agendaDeContactos();
         }
 
@@ -492,6 +547,14 @@ public class vasilealexandru02
                 }
             }
 
+        }
+        // Este método borra el contenido del fichero de texto 
+        static void vaciarArchivo()
+        {
+            using (StreamWriter file = new StreamWriter(rutaArchivoTxt))
+            {
+                // No escribir nada en el archivo
+            }
         }
 
         // Este método los contactos del fichero de texto
@@ -515,7 +578,7 @@ public class vasilealexandru02
             }
             catch (Exception)
             {
-
+                Console.WriteLine("Error leyendo contactos del fichero");
             }
         }
     }

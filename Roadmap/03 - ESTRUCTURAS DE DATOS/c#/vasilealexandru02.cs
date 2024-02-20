@@ -421,7 +421,45 @@ public class vasilealexandru02
         // Este método elimina un contacto
         static void eliminarContacto()
         {
-            throw new NotImplementedException();
+
+            if (!(listaDeContactos.Count == 0))
+            {
+                int idUsuario;
+                bool idCorrecto;
+                bool campoAModificarCorrecto;
+                int campoAModificar;
+                string mensajeActualizar = "Introduce el id del usuario que quieres eliminar: ";
+
+
+                do
+                {
+                    Console.WriteLine(mensajeActualizar);
+                    idCorrecto = int.TryParse(Console.ReadLine(), out idUsuario);
+                    mensajeActualizar = "Por favor introduce un valor numérico válido: ";
+
+                } while (!idCorrecto);
+
+
+                var contactoSeleccionado = listaDeContactos.Where(c => c.idContacto == idUsuario).FirstOrDefault();
+                if (contactoSeleccionado != null)
+                {
+                    listaDeContactos.Remove(contactoSeleccionado);
+                    Console.WriteLine("Contacto eliminado correctamente");
+
+                }
+                else
+                {
+                    Console.WriteLine("¡Id introducida no encontrada!");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("¡La lista está vacía :(!");
+            }
+            vaciarArchivo();
+            guardarContacto();
+            agendaDeContactos();
         }
 
         // Este método va a actualizar un contacto en concreto
